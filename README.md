@@ -16,10 +16,11 @@ where `w_o` and `w_y` are the SIFT2-weighted connection strengths from the older
 
 ```
 conference/         MICCAI PIPPI 2026 workshop paper
+  paper.pdf         Paper (added after publication)
   pipeline/         Pipeline scripts (34-node cortical parcellation)
   data/             Response functions (Pietsch et al. 2019 atlas)
 
-journal/            Journal paper (forthcoming)
+journal/            Journal paper (forthcoming, may use different parameters)
 ```
 
 ## Pipeline
