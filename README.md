@@ -12,6 +12,16 @@ M = w_o / (w_o + w_y)
 
 where `w_o` and `w_y` are the SIFT2-weighted connection strengths from the older and younger response functions, respectively. Higher M indicates more mature connectivity.
 
+## Repository Structure
+
+```
+conference/         MICCAI PIPPI 2026 workshop paper
+  pipeline/         Pipeline scripts (34-node cortical parcellation)
+  data/             Response functions (Pietsch et al. 2019 atlas)
+
+journal/            Journal paper (forthcoming)
+```
+
 ## Pipeline
 
 ```
@@ -39,7 +49,7 @@ pip install -r requirements.txt
 ## Data
 
 - Requires access to [dHCP release data](https://biomedia.github.io/dHCP-release-notes/)
-- Pietsch et al. (2019) atlas response functions are included in `data/response_functions/`
+- Pietsch et al. (2019) atlas response functions are included in `conference/data/response_functions/`
 
 ## Usage
 
@@ -47,38 +57,34 @@ Each pipeline stage requires paths to the dHCP data directories:
 
 ```bash
 # 1. Convert dHCP data to MRtrix format
-python pipeline/data_prep/copy_data_dhcp.py \
+python conference/pipeline/data_prep/copy_data_dhcp.py \
     --dwi-source /path/to/rel3_dhcp_dmri_shard_pipeline \
     --anat-source /path/to/rel3_dhcp_anat_pipeline \
     --output-dir /path/to/output \
     --scan-info /path/to/scan_info.csv
 
 # 2. ODF estimation (two-component MSMT-CSD)
-python pipeline/odf_est/odf_estimation.py \
+python conference/pipeline/odf_est/odf_estimation.py \
     --dhcp-dir /path/to/processed \
     --scratch-dir /path/to/scratch
 
 # 3. Tractography + SIFT2
-python pipeline/tractography/tractography.py \
+python conference/pipeline/tractography/tractography.py \
     --dhcp-dir /path/to/processed \
     --scratch-dir /path/to/scratch
 
 # 4. SIFT2 weight=1 filtering
-python pipeline/tractography/tractography_sift2_weight1_filter.py \
+python conference/pipeline/tractography/tractography_sift2_weight1_filter.py \
     --dhcp-dir /path/to/processed \
     --scratch-dir /path/to/scratch
 
 # 5. Connectome generation
-python pipeline/connectome_gen/connectome_generation.py \
+python conference/pipeline/connectome_gen/connectome_generation.py \
     --dhcp-dir /path/to/processed \
     --scratch-dir /path/to/scratch \
     --dwi-source /path/to/rel3_dhcp_dmri_shard_pipeline \
     --anat-source /path/to/rel3_dhcp_anat_pipeline
 ```
-
-## Conference Paper
-
-The accompanying MICCAI PIPPI 2026 workshop paper PDF will be added to `conference/` after publication.
 
 ## Citation
 
