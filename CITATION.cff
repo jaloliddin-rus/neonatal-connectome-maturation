@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the paper below."
+title: "neonatal-connectome-maturation"
+type: software
+authors:
+  - family-names: Rustamov
+    given-names: Jaloliddin
+    orcid: "https://orcid.org/0000-0003-3701-1611"
+repository-code: "https://github.com/jaloliddin-rus/neonatal-connectome-maturation"
+license: MIT
+preferred-citation:
+  type: conference-paper
+  title: "Mapping Structural Connectivity in the Neonatal Developing Brain using Multi-Component Tissue Modelling"
+  authors:
+    - family-names: Rustamov
+      given-names: Jaloliddin
+      orcid: "https://orcid.org/0000-0003-3701-1611"
+    - family-names: Leysen
+      given-names: Siebe
+      orcid: "https://orcid.org/0000-0001-5977-9088"
+    - family-names: Radwan
+      given-names: Ahmed
+      orcid: "https://orcid.org/0000-0002-4819-548X"
+    - family-names: Christiaens
+      given-names: Daan
+      orcid: "https://orcid.org/0000-0001-8323-5451"
+    - family-names: Damseh
+      given-names: Rafat
+      orcid: "https://orcid.org/0000-0001-6797-0448"
+  collection-title: "Medical Image Computing and Computer Assisted Intervention – MICCAI 2026 Satellite Events"
+  conference:
+    name: "Perinatal, Preterm and Paediatric Image Analysis (PIPPI 2026)"
+    city: Strasbourg
+    country: FR
+  publisher:
+    name: Springer
+  year: 2026
+  status: in-press
+  notes: "Lecture Notes in Computer Science. To appear."
