@@ -91,7 +91,21 @@ python conference/pipeline/connectome_gen/connectome_generation.py \
 
 If you use this code, please cite:
 
-> Rustamov J, Leysen S, Radwan A, Christiaens D, Damseh R. *Two-Component MSMT-CSD Connectome Maturation in Neonates*. MICCAI PIPPI Workshop, 2026.
+> Rustamov J, Leysen S, Radwan A, Christiaens D, Damseh R. *Mapping Structural Connectivity in the Neonatal Developing Brain using Multi-Component Tissue Modelling*. In: Perinatal, Preterm and Paediatric Image Analysis (PIPPI 2026), MICCAI 2026 Satellite Events. Lecture Notes in Computer Science. Springer; 2026 (to appear).
+
+```bibtex
+@inproceedings{rustamov2026mapping,
+  title     = {Mapping Structural Connectivity in the Neonatal Developing Brain using Multi-Component Tissue Modelling},
+  author    = {Rustamov, Jaloliddin and Leysen, Siebe and Radwan, Ahmed and Christiaens, Daan and Damseh, Rafat},
+  booktitle = {Medical Image Computing and Computer Assisted Intervention -- MICCAI 2026 Satellite Events},
+  series    = {Lecture Notes in Computer Science},
+  publisher = {Springer},
+  year      = {2026},
+  note      = {Perinatal, Preterm and Paediatric Image Analysis (PIPPI 2026) workshop. To appear}
+}
+```
+
+A machine-readable version is in [CITATION.cff](CITATION.cff); GitHub's "Cite this repository" button uses it.
 
 ## License
 
