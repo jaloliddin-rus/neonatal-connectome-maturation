@@ -6,11 +6,11 @@ Quantifying structural brain connectivity development in neonates using diffusio
 
 This pipeline implements a two-component multi-shell multi-tissue constrained spherical deconvolution (MSMT-CSD) framework (Pietsch et al. 2019) to decompose white matter fibre orientation distributions into younger (immature) and older (mature) tissue components. SIFT2-weighted connectomes are built from each component independently, yielding a per-edge **maturation index**:
 
-```
-M = w_o / (w_o + w_y)
+```math
+M_{ij} = \frac{O_{ij}}{Y_{ij} + O_{ij}}
 ```
 
-where `w_o` and `w_y` are the SIFT2-weighted connection strengths from the older and younger response functions, respectively. Higher M indicates more mature connectivity.
+where $`O_{ij}`$ and $`Y_{ij}`$ are the SIFT2-weighted strengths of the connection between regions $`i`$ and $`j`$ from the older and younger response functions, respectively. Higher M indicates more mature connectivity.
 
 ## Repository Structure
 
