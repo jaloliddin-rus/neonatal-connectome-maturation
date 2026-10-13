@@ -21,6 +21,13 @@ Usage:
       --output-dir /path/to/output --scan-info /path/to/scan_info.csv
   ./copy_data_dhcp.py --dwi-source ... --anat-source ... --output-dir ... --scan-info ... --dry-run
   ./copy_data_dhcp.py --dwi-source ... --anat-source ... --output-dir ... --scan-info ... sub-EXAMPLE
+  ./copy_data_dhcp.py --dwi-source ... --anat-source ... --output-dir ... --scan-info ... \\
+      --exclude-subjects /path/to/excluded_subjects.txt
+
+Exclusion file (--exclude-subjects): one subject ID per line, optionally followed by
+whitespace and a free-text reason; blank lines and lines starting with '#' are ignored:
+  # subject_id  reason
+  sub-EXAMPLE   anat and DWI acquired in different sessions
 """
 
 import argparse
@@ -30,9 +37,6 @@ import subprocess
 from pathlib import Path
 
 EXPECTED_VOLUMES = 300
-MANUAL_EXCLUSIONS = {
-    "sub-REDACTED": "anat and DWI acquired in different sessions",
-}
 
 
 def parse_args() -> argparse.Namespace:
@@ -55,6 +59,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--scan-info", type=Path, required=True,
         help="Path to neonatal scan info CSV (for radiology exclusions).",
+    )
+    parser.add_argument(
+        "--exclude-subjects", type=Path, default=None, metavar="FILE",
+        help="Text file of subject IDs to exclude, one per line, each optionally "
+             "followed by a reason. Lines starting with '#' are ignored. "
+             "Default: no manual exclusions.",
     )
     parser.add_argument(
         "--nthreads", type=int, default=os.cpu_count() or 1,
@@ -88,6 +98,25 @@ def load_radiology_exclusions(csv_path: Path, excluded_scores: set[int] = {4, 5}
             if score in excluded_scores:
                 excluded.add(row["src_subject_id"].strip())
     return excluded
+
+
+def load_manual_exclusions(path: Path | None) -> dict[str, str]:
+    """Return {subject_id: reason} from an exclusion file (empty if path is None).
+
+    Each non-blank, non-comment line holds a subject ID (matching the subject
+    directory name, e.g. sub-EXAMPLE), optionally followed by whitespace and a reason.
+    """
+    if path is None:
+        return {}
+    exclusions: dict[str, str] = {}
+    with open(path) as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            parts = line.split(maxsplit=1)
+            exclusions[parts[0]] = parts[1] if len(parts) > 1 else "manual exclusion"
+    return exclusions
 
 
 def get_nvols(nii_path: Path) -> int | None:
@@ -164,14 +193,15 @@ def main() -> None:
         subjects = sorted(p.name for p in dwi_source.glob("sub-*") if p.is_dir())
 
     radiology_excluded = load_radiology_exclusions(scan_info)
+    manual_exclusions = load_manual_exclusions(args.exclude_subjects)
     total_subjects = len(subjects)
     total_sessions = sum(
         1 for s in subjects
         for _ in (dwi_source / s).glob("ses-*/") if (dwi_source / s).is_dir()
     )
     n_radiology = sum(1 for s in subjects if s in radiology_excluded)
-    n_manual = sum(1 for s in subjects if s in MANUAL_EXCLUSIONS)
-    subjects = [s for s in subjects if s not in radiology_excluded and s not in MANUAL_EXCLUSIONS]
+    n_manual = sum(1 for s in subjects if s in manual_exclusions)
+    subjects = [s for s in subjects if s not in radiology_excluded and s not in manual_exclusions]
     volume_skipped = 0
     converted = 0
     processed = 0
@@ -292,7 +322,7 @@ def main() -> None:
     print(f"  Excluded due to:")
     print(f"    - Radiology score 4/5    : {n_radiology} subjects")
     print(f"    - Incomplete volumes     : {volume_skipped} sessions")
-    for sub, reason in MANUAL_EXCLUSIONS.items():
+    for sub, reason in manual_exclusions.items():
         print(f"    - {sub}: {reason}")
     print(f"  Subjects remaining         : {len(subjects)}")
     print(f"  Sessions remaining         : {processed}")

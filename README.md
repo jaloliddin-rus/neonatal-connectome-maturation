@@ -62,7 +62,8 @@ python conference/pipeline/data_prep/copy_data_dhcp.py \
     --dwi-source /path/to/rel3_dhcp_dmri_shard_pipeline \
     --anat-source /path/to/rel3_dhcp_anat_pipeline \
     --output-dir /path/to/output \
-    --scan-info /path/to/scan_info.csv
+    --scan-info /path/to/scan_info.csv \
+    --exclude-subjects /path/to/excluded_subjects.txt   # optional
 
 # 2. ODF estimation (two-component MSMT-CSD)
 python conference/pipeline/odf_est/odf_estimation.py \
@@ -86,6 +87,8 @@ python conference/pipeline/connectome_gen/connectome_generation.py \
     --dwi-source /path/to/rel3_dhcp_dmri_shard_pipeline \
     --anat-source /path/to/rel3_dhcp_anat_pipeline
 ```
+
+Subjects with a radiology score of 4 or 5 are excluded using `--scan-info`. Further subjects can be excluded with `--exclude-subjects`, a text file with one subject ID per line, optionally followed by a reason (lines starting with `#` are ignored). By default no extra subjects are excluded. The conference cohort excluded one further subject whose anatomical and diffusion data came from different scan sessions. Its ID is not published in this repository.
 
 ## Citation
 
